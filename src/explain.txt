@@ -1,0 +1,2 @@
+CSS modules are a way to scope CSS classes to a specific component or module in an application. The Style files are named with .module.css convention to avoid 
+collision of similar names.
