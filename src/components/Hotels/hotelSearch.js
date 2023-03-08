@@ -25,6 +25,7 @@ function HotelBooking() {
       })
       let resJson = await res.json();
       if (res.status === 200) {
+        console.log("json!");
         console.log(resJson);
         data = res.data;
         isSubmitted=true;
@@ -90,7 +91,7 @@ function HotelBooking() {
           {/* </form> */}
         </form>
         {/* {isSubmitted && <HotelCards/>} */}
-        {/* <HotelCards hotels={data}/> */}
+        {/* <HotelCards hotels={data? data : []}/> */}
       </div>
     </>
   );
