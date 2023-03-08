@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from "./hotel.module.css"
-import HotelCards from './hotelcards';
+import HotelCards from './hotelcards.js';
 
 function HotelBooking() {
   const [location, setLocation] = useState('');
@@ -91,7 +91,7 @@ function HotelBooking() {
           {/* </form> */}
         </form>
         {/* {isSubmitted && <HotelCards/>} */}
-        {/* <HotelCards hotels={data? data : []}/> */}
+        <HotelCards hotels={data? data : []}/>
       </div>
     </>
   );

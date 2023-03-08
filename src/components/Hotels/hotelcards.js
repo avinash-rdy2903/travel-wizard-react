@@ -17,13 +17,18 @@ function HotelCards(hotels) {
   //               {name:"Hyatt Grand",address:"Manhattan, New York",availability:2,image:"https://images.unsplash.com/photo-1535827841776-24afc1e255ac?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8aG90ZWxzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"},
   //               {name:"Indiana Memorial Union",address:"Bloomington, Indiana",availability:0,image:"https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjB8fGhvdGVsc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"}
   //           ]
+
+  // hotels = [];
   // return (<div><h1>No results.</h1></div>);
-    console.log("hotels");
+    console.log("hotels!");
     console.log(hotels);
-    if (hotels.length === 0) return (<div><h1>No results.</h1></div>)
+    if (hotels.length === 0) {
+      console.log("none");
+      return (<div><h1>No results.</h1></div>)
+    }
     else return (
       <div className={styles.wrapper}>
-        {[].map(hotelData =>   {
+        {hotels.map(hotelData =>   {
           return (hotelData.availability)? 
             <Card
               img = {hotelData.image}

@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+import bk from "../Images/aroundTheWorld.jpg";
 
 const getCitiesOne = async (str) => {
   try {
@@ -59,9 +60,8 @@ export default function Home() {
   }
 
   return (
-    <div className={styles.container}>
-      
-      
+    <div className={styles.container}>  
+    {/* class={styles.bg} */}
       <div style={{ marginTop: 50 }}>
       <h2 style={{marginBottom:15}}>Search your next destination</h2>
         <Autocomplete

@@ -6,7 +6,7 @@ import Home from "./components/Home/home.js"
 import NavigationBar from "./components/NavBar/navbar"
 import FlightSearch from "./components/Flights/flight"
 import HotelBooking from "./components/Hotels/hotelSearch"
-import HotelCards from "./components/Hotels/hotelcards"
+import HotelCards from "./components/Hotels/hotelcards.js"
 import Itineraries from "./components/Itineraries/itineraries";
 
 function App() {
