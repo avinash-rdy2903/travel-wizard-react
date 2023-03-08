@@ -14,7 +14,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-// import logo from '../../logo.gif';
+import logo from '../Images/logo.gif';
 // import Stack from '@mui/material/Stack';
 // import TextField from '@mui/material/TextField';
 import './navbar.module.css'
@@ -28,10 +28,10 @@ function NavigationBar() {
         <Navbar bg="dark" variant="dark">
           <Container>
           <Navbar.Brand href="/">
-          {/* <img src={logo} 
+          <img src={logo} 
               width="30"
               height="30"
-              className="d-inline-block align-top" />{' '} */}
+              className="d-inline-block align-top" />{' '}
             Travel Wizard
           </Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${'lg'}`} />

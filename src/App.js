@@ -5,7 +5,7 @@ import Login from "./components/Login/login";
 // import Home from "./components/Home/home"
 import NavigationBar from "./components/NavBar/navbar"
 import FlightSearch from "./components/Flights/flight"
-import HotelBooking from "./components/Hotels/hotel"
+import HotelBooking from "./components/Hotels/hotelSearch"
 import HotelCards from "./components/Hotels/hotelcards"
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
 				<Route path="/signup" exact element={<Signup />} />
 				<Route path="/login" exact element={<Login />} />
 				<Route path="/hotelcards" exact element={<HotelCards />} />
+				{/* <Route path="/hotelcards" render={(props) => <HotelCards {...props} authed={true} />} /> */}
 				<Route path="/" exact element={<Navigate replace to= "/login" />} />
 			</Routes>
 		</BrowserRouter>
