@@ -10,8 +10,8 @@ function HotelBooking() {
   const [averageRatings, setAvgRating] = useState(1);
   const [minPrice, setMinPrice] = useState(1);
   const [maxPrice, setMaxPrice] = useState(1000);
+  const [data,setData]=useState([]);
 
-  var data;
   var isSubmitted= false;
 
   const handleSubmit = async (e) => {
@@ -27,7 +27,10 @@ function HotelBooking() {
       if (res.status === 200) {
         console.log("json!");
         console.log(resJson);
-        data = res.data;
+        // data = resJson.data;
+        setData(resJson.data);
+        console.log("data!");
+        console.log(data);
         isSubmitted=true;
           // setMessage(resJson.message);
       } else {
@@ -91,6 +94,9 @@ function HotelBooking() {
           {/* </form> */}
         </form>
         {/* {isSubmitted && <HotelCards/>} */}
+          {/* {
+            data && data.length>0 && data.map((item)=><p>{item.name}</p>)
+          } */}
         <HotelCards hotels={data? data : []}/>
       </div>
     </>
