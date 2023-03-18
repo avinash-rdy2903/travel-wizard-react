@@ -7,6 +7,7 @@ import NavigationBar from "./components/NavBar/navbar"
 import FlightSearch from "./components/Flights/flight"
 import HotelBooking from "./components/Hotels/hotelSearch"
 import HotelCards from "./components/Hotels/hotelcards.js"
+import Hotel from "./components/Hotels/hotel";
 import Itineraries from "./components/Itineraries/itineraries";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
 				{ user && <Route path="/" exact element={<Home />} />}
 				<Route path="/flights" exact element={<FlightSearch />} />
 				<Route path="/hotels" exact element={<HotelBooking />} />
+				<Route path="/hotel" exact element={<Hotel />} />
 				<Route path="/signup" exact element={<Signup />} />
 				<Route path="/login" exact element={<Login />} />
 				<Route path="/itineraries" exact element={<Itineraries />} />

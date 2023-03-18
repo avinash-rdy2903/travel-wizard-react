@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import styles from "./hotel.module.css"
+import styles from "./hotelSearch.module.css"
 import HotelCards from './hotelcards.js';
 
 function HotelBooking() {
