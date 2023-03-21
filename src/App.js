@@ -4,7 +4,8 @@ import Signup from "./components/Signup/signup";
 import Login from "./components/Login/login";
 import Home from "./components/Home/home.js"
 import NavigationBar from "./components/NavBar/navbar"
-import FlightSearch from "./components/Flights/flight"
+import FlightSearch from "./components/Flights/flightSearch"
+import Flight from "./components/Flights/flight";
 import HotelBooking from "./components/Hotels/hotelSearch"
 import HotelCards from "./components/Hotels/hotelcards.js"
 import Hotel from "./components/Hotels/hotel";
@@ -19,6 +20,7 @@ function App() {
 			<Routes>
 				{ user && <Route path="/" exact element={<Home />} />}
 				<Route path="/flights" exact element={<FlightSearch />} />
+				<Route path="/flight" exact element={<Flight />} />
 				<Route path="/hotels" exact element={<HotelBooking />} />
 				<Route path="/hotel" exact element={<Hotel />} />
 				<Route path="/signup" exact element={<Signup />} />

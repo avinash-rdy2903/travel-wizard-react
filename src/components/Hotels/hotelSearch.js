@@ -27,7 +27,6 @@ function HotelBooking() {
       if (res.status === 200) {
         console.log("json!");
         console.log(resJson);
-        // data = resJson.data;
         setData(resJson.data);
         console.log("data!");
         console.log(data);
@@ -37,9 +36,9 @@ function HotelBooking() {
           // setMessage("Some error occured");
       }
       // window.location = "/hotelcards";
-  }catch(err){
-// setMessage("Some error occured");
-  }
+    }catch(err){
+      // setMessage("Some error occured");
+    }
   };
 
   return (
