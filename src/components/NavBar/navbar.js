@@ -77,7 +77,7 @@ function NavigationBar() {
                     {/* TODO: info about saving search here: https://refine.dev/blog/material-ui-autocomplete-component/#what-is-material-ui */}
 
                   {/* </Stack> */}
-                  <Button variant="outline-info" href="/hotelcards">Search</Button>
+                  {/* <Button variant="outline-info" href="/hotelcards">Search</Button> */}
                 </Form>
               </Offcanvas.Body>
             </Navbar.Offcanvas>
