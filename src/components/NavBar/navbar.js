@@ -47,7 +47,7 @@ function NavigationBar() {
               </Offcanvas.Header>
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-3">
-                  <Nav.Link href="/itineraries">Your Itineraries</Nav.Link>
+                  <Nav.Link href="/itinerary">Your Itinerary</Nav.Link>
                   <Nav.Link href="/flights">Flights</Nav.Link>
                   <Nav.Link href="/hotels">Hotels</Nav.Link>
                   <NavDropdown
