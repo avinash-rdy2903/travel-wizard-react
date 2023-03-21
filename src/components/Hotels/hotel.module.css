@@ -89,6 +89,14 @@ body {
   color: var(--clr-primary);
   border-radius: var(--radius);
   transition: background 200ms ease-in, color 200ms ease-in;
+  align-self: last baseline;
+}
+
+.saved {
+  padding: 1rem;
+  margin: 1rem;
+  align-self: last baseline;
+  color:#767b91;
 }
 
 
