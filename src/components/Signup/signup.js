@@ -7,7 +7,7 @@ const Signup = () => {
 	const [data, setData] = useState({
 		fn: "",
 		ln: "",
-		email: "",
+		username: "",
 		password: "",
 		phone: ""
 	});
@@ -69,11 +69,11 @@ const Signup = () => {
 							className={styles.input}
 						/>
 						<input
-							type="email"
-							placeholder="Email"
-							name="email"
+							type="text"
+							placeholder="Username"
+							name="username"
 							onChange={handleChange}
-							value={data.email}
+							value={data.username}
 							required
 							unique
 							className={styles.input}
