@@ -5,7 +5,7 @@ import styles from "./login.module.css";
 
 const Login = () => {
 	const [data, setData] = useState({ 
-		email: "", 
+		username: "", 
 		password: ""
 	});
 	const [error, setError] = useState("");
@@ -18,8 +18,8 @@ const Login = () => {
 		e.preventDefault();
 		try {
 			const url = "http://localhost:8080/auth/local";
-			const { data: res } = await axios.post(url, data);
-			localStorage.setItem("token", res.data);			//sets the key 'token' and its value as 'data' - locally stores in the browser.
+			const { data: res } = await axios.post(url, data, {withCredentials: true});
+			localStorage.setItem("token", res.data);
 			window.location = "/";
 		} catch (error) {
 			if (
@@ -39,11 +39,11 @@ const Login = () => {
 					<form className={styles.form_container} onSubmit={handleSubmit}>
 						<h1>Login to Your Account</h1>
 						<input
-							type="email"
-							placeholder="Email"
-							name="email"
+							type="text"
+							placeholder="Username"
+							name="username"
 							onChange={handleChange}
-							value={data.email}
+							value={data.username}
 							required
 							className={styles.input}
 						/>
