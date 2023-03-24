@@ -10,6 +10,8 @@ import HotelBooking from "./components/Hotels/hotelSearch"
 import HotelCards from "./components/Hotels/hotelcards.js"
 import Hotel from "./components/Hotels/hotel";
 import Itinerary from "./components/Itinerary/itinerary";
+import Search from "./components/Search/search";
+import SearchResult from "./components/Search/searchresults";
 
 function App() {
 	const user = localStorage.getItem("token"); 
@@ -27,6 +29,8 @@ function App() {
 				<Route path="/login" exact element={<Login />} />
 				<Route path="/itinerary" exact element={<Itinerary />} />
 				<Route path="/hotelcards" exact element={<HotelCards />} />
+				<Route path="/search" exact element={<Search />} />
+				<Route path="/searchResult" exact element={<SearchResult />} />
 				{/* <Route path="/hotelcards" render={(props) => <HotelCards {...props} authed={true} />} /> */}
 				{/* <Route path="/" exact element={<Navigate replace to= "/login" />} /> */}
 			</Routes>

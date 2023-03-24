@@ -1,11 +1,10 @@
-// import Head from "next/head";
+import Search from "../Search/search";
 import styles from "./home.module.css";
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import axios from "axios";
-import { Button } from "react-bootstrap";
-import bk from "../Images/aroundTheWorld.jpg";
+import {Link } from "react-router-dom";
 
 const getCitiesOne = async (str) => {
   try {
@@ -34,30 +33,6 @@ export default function Home() {
       console.log(data+"here");
     }
   };
-  const search = async () => {
-    try{
-      for(let i=0;i<data.length;i++) {
-        let place = data[i];
-        if(place.name===value){
-          console.log(place)
-          let res = await fetch(`http://localhost:8080/place/${place._id}`,{
-            method: "GET",
-            credentials: 'include'
-        })
-          let resJson = await res.json();
-          // console.log(JSON(resJson));
-          if(resJson.status === 200){
-            // setData(JSON.stringify(resJson.data,null,4));
-            console.log(resJson.place.attractions);
-            console.log(JSON.stringify(resJson.place.attractions));
-            console.log(JSON.stringify(resJson.place,null,4));
-          }
-        }
-      }
-    }catch(e){
-      console.log(e.stack);
-    }
-  }
 
   return (
     <div className={styles.container}>  
@@ -77,7 +52,10 @@ export default function Home() {
             />
           )}
         />
-        <button style={{marginTop:15}} onClick={search}>Search</button>
+        <Link to="/search" state={{ val: value, dat: data }}>
+        {/* <Link to="/search" state={{ val: value, dat: data, dest: place }}> */}
+          <button style={{marginTop:15}} onClick={Search.search}>Search</button>
+        </Link>
         {/* <Button on */}
         
       </div>
