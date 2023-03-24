@@ -1,14 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './search.module.css';
-import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
+import { Button } from "react-bootstrap";
+import axios from "axios";
 
 function Search() 
 {
     const [attractions,setAttractions] = useState([]);
     const location = useLocation();
-    const { val, dat } = location.state;
+    const { val, dat } = location.state;    
+    const [isSaved,setSaved] = useState([]);
+    const [date, setDate] = useState('');
+  
+    const save = async (e) => {
+      e.preventDefault();
+  
+      let placeId = dat[0]._id;
+  
+      console.log(`Saving:
+        id: ${placeId},
+        date: ${date}`);
+  
+        const stuff = { placeId: placeId, visitingDate: date };
+      try{
+          console.log("doing my best here");
+          const res = await axios.post(`http://localhost:8080/cart/places`, {
+                placeId: placeId,
+                visitingDate: date,
+              }, {withCredentials: true});
+          console.log(res);
+          console.log("done");
+          setSaved(69);
+      }catch(e){
+        console.log(e.stack);
+      }
+    }
 
 
     useEffect(() => {
@@ -62,6 +89,16 @@ function Search()
         <div>
             <h2>Hey</h2>
             <h2>{dat[0].name}</h2>
+                {/* TODO: this date thing will belong somewhere else and be required */}
+                <label htmlFor="date">Date:</label>
+                <input
+                    type="date"
+                    id="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                />
+            {!(isSaved == 69) && <Button className={styles.card__btn} onClick={save}>Save {dat[0].name} to itinerary</Button>}
+            {(isSaved == 69) && <p className={styles.saved}>Saved</p>}
             {attractions && attractions.map(attraction =>   {
                     return <Card a = {attraction} />
                 }
