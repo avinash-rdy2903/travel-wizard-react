@@ -24,7 +24,7 @@ const Signup = () => {
 		try {
 			const url = "http://localhost:8080/register";
 			const { data: res } = await axios.post(url, data);
-			navigate("/login");
+			navigate("/");
 			console.log(res.message);
 		} catch (error) {
 			if (

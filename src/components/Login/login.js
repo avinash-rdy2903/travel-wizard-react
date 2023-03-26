@@ -1,26 +1,40 @@
-import { useState } from "react";
-import axios from "axios";
+import { useState,memo } from "react";
+import axiosInstance from "../../API/axiosInstance";
 import { Link } from "react-router-dom";
 import styles from "./login.module.css"; 
-
-const Login = () => {
+import {useUserState, usePlaceCartState, useHotelCartState, useFlightCartState} from '../../globalState/globalState';
+import {useNavigate} from 'react-router-dom'
+const Login = memo(() => {
 	const [data, setData] = useState({ 
 		username: "", 
 		password: ""
 	});
+	const navigate = useNavigate();
 	const [error, setError] = useState("");
-
+	const {user,setUser} = useUserState();
+	const {placeCart,setPlaceCart} = usePlaceCartState();
+	const {hotelCart,setHotelCart} = useHotelCartState();
+	const {flightCart,setFlightCart} = useFlightCartState();
 	const handleChange = ({ currentTarget: input }) => {
 		setData({ ...data, [input.name]: input.value });
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		console.log("app login");
 		try {
-			const url = "http://localhost:8080/auth/local";
-			const { data: res } = await axios.post(url, data, {withCredentials: true});
-			localStorage.setItem("token", res.data);
-			window.location = "/";
+			const url = "auth/local";
+			//using axiosInstance the base url i.e, http://localhost:8080/ is not required as it is given to axiosInstance at the time of it's creation.
+			const { data: res } = await axiosInstance.post(url, data);
+			// localStorage.setItem("token", res.data);
+			console.log(res);
+			setUser(res.user);
+			// localStorage.setItem("user", JSON.stringify(res.user));
+			setPlaceCart(res.placeCart);
+			setHotelCart(res.hotelCart);
+			setFlightCart(res.flightCart);
+			console.log(user);
+			navigate("/");
 		} catch (error) {
 			if (
 				error.response &&
@@ -73,6 +87,6 @@ const Login = () => {
 			</div>
 		</div>
 	);
-};
+});
 
 export default Login;

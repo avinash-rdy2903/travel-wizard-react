@@ -3,15 +3,15 @@ import styles from "./home.module.css";
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import axios from "axios";
+import axiosInstance from "../../API/axiosInstance";
 import {Link } from "react-router-dom";
 
 const getCitiesOne = async (str) => {
   try {
     let searchableCity = str.replace(/,/g, "");
-    let url = "http://localhost:8080/search/" + searchableCity;
+    let url = "search/" + searchableCity;
 
-    let { data } = await axios.get(url);
+    let { data } = await axiosInstance.get(url);
     console.log(data);
     return data;
   } catch (error) {
