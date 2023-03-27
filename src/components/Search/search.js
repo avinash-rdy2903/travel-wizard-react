@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import styles from './search.module.css';
 import { Link } from 'react-router-dom';
 import { Button } from "react-bootstrap";
-import axios from "axios";
+import axiosInstance from '../../API/axiosInstance';
 
 function Search() 
 {
@@ -25,10 +25,10 @@ function Search()
         const stuff = { placeId: placeId, visitingDate: date };
       try{
           console.log("doing my best here");
-          const res = await axios.post(`http://localhost:8080/cart/places`, {
+          const res = await axiosInstance.post(`cart/places`, {
                 placeId: placeId,
                 visitingDate: date,
-              }, {withCredentials: true});
+              });
           console.log(res);
           console.log("done");
           setSaved(69);

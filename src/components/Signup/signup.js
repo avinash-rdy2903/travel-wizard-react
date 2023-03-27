@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../API/axiosInstance";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./signup.module.css";
 
@@ -22,8 +22,8 @@ const Signup = () => {
 		e.preventDefault();										// to prevent the default behavior of the browser after form submission.
 		//Below we handle the form submission ourselvves.
 		try {
-			const url = "http://localhost:8080/register";
-			const { data: res } = await axios.post(url, data);
+			const url = "register";
+			const { data: res } = await axiosInstance.post(url, data);
 			navigate("/");
 			console.log(res.message);
 		} catch (error) {

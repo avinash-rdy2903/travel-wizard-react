@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from "./FlightSearch.module.css";
 import FlightCards from './flightCards';
-
+import axiosInstance, { AxiosInstance } from '../../API/axiosInstance';
 function FlightSearch() {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
@@ -22,10 +22,7 @@ function FlightSearch() {
       let placeId = '64058586d3cca7ef541834d9';
       try{
         // TODO: this is the fetch link for hotels, alter it for flights
-        let res = await fetch(`http://localhost:8080/flights?source=${from}&destination=${to}&date=${departureDate}`,{
-            method: "GET",
-            credentials: 'include'
-        })
+        let res = await axiosInstance.get(`flights?source=${from}&destination=${to}&date=${departureDate}`);
         let resJson = await res.json();
         if (res.status === 200) {
           console.log("flight json!");
