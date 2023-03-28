@@ -1,12 +1,14 @@
 import { useState } from "react";
-import axiosInstance from "../../API/axiosInstance";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./signup.module.css";
+import axiosInstance from "../../API/axiosInstance";
 
 const Signup = () => {
 	const [data, setData] = useState({
 		fn: "",
 		ln: "",
+		email: "",
 		username: "",
 		password: "",
 		phone: ""
@@ -24,8 +26,9 @@ const Signup = () => {
 		try {
 			const url = "register";
 			const { data: res } = await axiosInstance.post(url, data);
-			navigate("/");
+			console.log("submitting login");
 			console.log(res.message);
+			navigate("/");
 		} catch (error) {
 			if (
 				error.response &&
@@ -69,6 +72,16 @@ const Signup = () => {
 							className={styles.input}
 						/>
 						<input
+							type="email"
+							placeholder="Email"
+							name="email"
+							onChange={handleChange}
+							value={data.email}
+							required
+							unique
+							className={styles.input}
+						/>
+						<input
 							type="text"
 							placeholder="Username"
 							name="username"
@@ -93,7 +106,6 @@ const Signup = () => {
 							name="phone"
 							onChange={handleChange}
 							value={data.phone}
-							required
 							className={styles.input}
 						/>
 																									

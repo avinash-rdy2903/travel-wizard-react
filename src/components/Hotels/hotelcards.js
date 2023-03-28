@@ -35,11 +35,7 @@ function HotelCards(hotels) {
     else return (
       <div className={styles.wrapper}>
         {hotels.map(hotelData =>   {
-          return (hotelData.availability)? 
-            <Card
-              hotelData = {hotelData}
-            /> 
-            : <></>
+          return <Card hotelData = {hotelData}/> 
           }
         )} 
 

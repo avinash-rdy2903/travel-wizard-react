@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import styles from './search.module.css';
 import { Link } from 'react-router-dom';
 import { Button } from "react-bootstrap";
-import axiosInstance from '../../API/axiosInstance';
+import axiosInstance from "../../API/axiosInstance";
 
 function Search() 
 {
@@ -16,18 +16,17 @@ function Search()
     const save = async (e) => {
       e.preventDefault();
   
-      let placeId = dat[0]._id;
+      let place = dat[0];
   
       console.log(`Saving:
-        id: ${placeId},
+        placeId: ${place._id},
         date: ${date}`);
   
-        const stuff = { placeId: placeId, visitingDate: date };
       try{
           console.log("doing my best here");
-          const res = await axiosInstance.post(`cart/places`, {
-                placeId: placeId,
+          const { data: res } = await axiosInstance.post(`cart/places`, {
                 visitingDate: date,
+                placeId: place._id,
               });
           console.log(res);
           console.log("done");
@@ -52,17 +51,15 @@ function Search()
             let place = dat[i];
             if(place.name===val){
               console.log(place)
-              let res = await fetch(`http://localhost:8080/place/${place._id}`,{
-                method: "GET",
-                credentials: 'include'
-                })
-                let resJson = await res.json();
-                if(resJson.status === 200){
-                    console.log(resJson.place.attractions);
-                    setAttractions(resJson.place.attractions);
-                    console.log(attractions);
-                    console.log(JSON.stringify(resJson.place.attractions));
-                    console.log(JSON.stringify(resJson.place,null,4));
+              const { data: res } = await axiosInstance.get(`place/${place._id}`);
+                // let resJson = await res.json();
+                if(res.status === 200){
+                    console.log(res);
+                    // console.log(res.place.attractions);
+                    setAttractions(res.place.attractions);
+                    // console.log(attractions);
+                    // console.log(JSON.stringify(resJson.place.attractions));
+                    // console.log(JSON.stringify(resJson.place,null,4));
                 }
             }
           }
@@ -99,7 +96,7 @@ function Search()
                 />
             {!(isSaved == 69) && <Button className={styles.card__btn} onClick={save}>Save {dat[0].name} to itinerary</Button>}
             {(isSaved == 69) && <p className={styles.saved}>Saved</p>}
-            {attractions && attractions.map(attraction =>   {
+            {dat[0].attractions && dat[0].attractions.map(attraction =>   {
                     return <Card a = {attraction} />
                 }
                 )} 

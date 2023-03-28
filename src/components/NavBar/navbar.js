@@ -24,6 +24,8 @@ const NavigationBar = React.memo(()=> {
   const {placeCart,setPlaceCart} = usePlaceCartState();
 	const {hotelCart,setHotelCart} = useHotelCartState();
 	const {flightCart,setFlightCart} = useFlightCartState();
+	const navigate = useNavigate();
+
   console.log(user);
   console.log(placeCart);
   console.log(hotelCart);
@@ -68,6 +70,8 @@ const NavigationBar = React.memo(()=> {
         }catch(err){
           console.log(err.stack);
         }
+        navigate("/");
+        window.location.reload(false);
       }
       if(JSON.stringify(user)===JSON.stringify({})){
       return (

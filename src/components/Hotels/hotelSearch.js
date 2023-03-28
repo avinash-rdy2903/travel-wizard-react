@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from "./hotelSearch.module.css"
 import HotelCards from './hotelcards.js';
-import axiosInstance from '../../API/axiosInstance';
+import axiosInstance from "../../API/axiosInstance";
+
 function HotelBooking() {
   const [location, setLocation] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -19,14 +20,13 @@ function HotelBooking() {
     // Perform hotel search with filter criteria
     let placeId = '64058586d3cca7ef541834d9';
     try{
-      let res = await axiosInstance.get(`hotels?placeId=${placeId}&start=${startDate}&end=${endDate}&minPrice=${minPrice}&maxPrice=${maxPrice}&rating=${averageRatings}`);
-      let resJson = await res.json();
+      const { data: res } = await axiosInstance.get(`hotels?placeId=${placeId}&start=${startDate}&end=${endDate}&minPrice=${minPrice}&maxPrice=${maxPrice}&rating=${averageRatings}`);
       if (res.status === 200) {
-        console.log("json!");
-        console.log(resJson);
-        setData(resJson.data);
+        // console.log("json!");
+        console.log(res);
+        setData(res.data);
         console.log("data!");
-        console.log(data);
+        console.log(res.data);
         isSubmitted=true;
           // setMessage(resJson.message);
       } else {

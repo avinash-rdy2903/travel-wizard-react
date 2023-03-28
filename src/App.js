@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {BrowserRouter,Route, Routes, Router} from "react-router-dom";
 // import Main from "./components/Main";
-import axiosInsatnce from "./API/axiosInstance";
+import axiosInstance from "./API/axiosInstance";
 import Signup from "./components/Signup/signup";
 import Login from "./components/Login/login";
 import Home from "./components/Home/home.js"

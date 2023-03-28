@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styles from "./FlightSearch.module.css";
 import FlightCards from './flightCards';
-import axiosInstance, { AxiosInstance } from '../../API/axiosInstance';
+import axiosInstance from "../../API/axiosInstance";
+
 function FlightSearch() {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
@@ -21,15 +22,10 @@ function FlightSearch() {
       Number of passengers: ${numPassengers}`);
       let placeId = '64058586d3cca7ef541834d9';
       try{
-        // TODO: this is the fetch link for hotels, alter it for flights
-        let res = await axiosInstance.get(`flights?source=${from}&destination=${to}&date=${departureDate}`);
-        let resJson = await res.json();
+        const { data: res } = await axiosInstance.get(`flights?source=${from}&destination=${to}&date=${departureDate}`);
         if (res.status === 200) {
-          console.log("flight json!");
-          console.log(resJson);
-          setData(resJson.data);
-          console.log("flight data!");
-          console.log(data);
+          setData(res.data);
+          console.log(res.data);
             // setMessage(resJson.message);
         } else {
             // setMessage("Some error occured");
@@ -82,6 +78,7 @@ function FlightSearch() {
         />
         <button type="submit">Search Flights</button>
       </form>
+      <p></p>
       <FlightCards flights={data? data : []}/>
     </div>
   );
