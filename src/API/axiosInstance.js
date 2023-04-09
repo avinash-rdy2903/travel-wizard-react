@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export default axios.create({
-    baseURL:"https://travel-wizard-t9.onrender.com//",
-    timeout:1000,
+    baseURL:"http://localhost:8080/",
     withCredentials:true,
 })

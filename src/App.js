@@ -14,6 +14,7 @@ import Hotel from "./components/Hotels/hotel";
 import Itinerary from "./components/Itinerary/itinerary";
 import Search from "./components/Search/search";
 import SearchResult from "./components/Search/searchresults";
+import ResetPassword from './components/ResetPassword/resetPassword';
 import {useUserState, usePlaceCartState, useHotelCartState, useFlightCartState} from './globalState/globalState';
 
 
@@ -39,6 +40,7 @@ const App = ()=>{
 					<Route path="/hotelcards"  exact element={<HotelCards />} />
 					<Route path="/search"  exact element={<Search />} />
 					<Route path="/searchResult"  exact element={<SearchResult />} />
+					<Route path="/reset-password" exact element={<ResetPassword />} />
 					{/* <Route path="/hotelcards" render={(props) => <HotelCards {...props} authed={true} />} /> */}
 					{/* <Route path="/" exact element={<Navigate replace to= "/login" />} /> */}
 				</Routes>

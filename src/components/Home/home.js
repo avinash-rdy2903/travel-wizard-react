@@ -3,15 +3,15 @@ import styles from "./home.module.css";
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import axiosInstance from "../../API/axiosInstance";
-import {Link } from "react-router-dom";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const getCitiesOne = async (str) => {
   try {
     let searchableCity = str.replace(/,/g, "");
-    let url = "search/" + searchableCity;
+    let url = "http://localhost:8080/search/" + searchableCity;
 
-    let { data } = await axiosInstance.get(url);
+    let { data } = await axios.get(url);
     console.log(data);
     return data;
   } catch (error) {
@@ -22,23 +22,27 @@ const getCitiesOne = async (str) => {
 export default function Home() {
   const [optionsOne, setOptionsOne] = useState([]);
   const [value, setValue] = useState("");
-  const [data,setData] = useState([]);
-  const [attractions,setAttractions] = useState([]);
+  const [data, setData] = useState([]);
+  const [attractions, setAttractions] = useState([]);
+  const [date, setDate] = useState("");
 
   const onChangeOne = async (e) => {
     if (e.target.value) {
       let d = await getCitiesOne(e.target.value);
       setOptionsOne(d);
       setData(d);
-      console.log(data+"here");
+      console.log(data + "here");
     }
   };
 
+  const isSearchDisabled = !date; // disable search if date is empty
+  const today = new Date().toISOString().split("T")[0]; // get current date
+
   return (
-    <div className={styles.container}>  
-    {/* class={styles.bg} */}
-      <div style={{ marginTop: 50 }}>
-      <h2 style={{marginBottom:15}}>Search your next destination</h2>
+    <div className={styles.container}>
+      {/* class={styles.bg} */}
+      <div style={{ marginTop: 10 }}>
+        <h2 style={{ marginBottom: 10 }}>Search your next destination</h2>
         <Autocomplete
           freeSolo
           filterOptions={(x) => x}
@@ -52,12 +56,22 @@ export default function Home() {
             />
           )}
         />
-        <Link to="/search" state={{ val: value, dat: data }}>
-        {/* <Link to="/search" state={{ val: value, dat: data, dest: place }}> */}
-          <button style={{marginTop:15}} onClick={Search.search}>Search</button>
+        <br />
+        <label htmlFor="date">Date:</label>
+        <input
+          type="date"
+          id="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          min={today} // set min date to current date
+        />
+        {isSearchDisabled && <p>Please enter a valid date</p>} {/* display message if date is empty */}
+        <br />
+        <Link to="/search" state={{ val: value, dat: data, date: date }}>
+          <button style={{ marginTop: 15 }} onClick={Search.search} disabled={isSearchDisabled}>
+            Search
+          </button>
         </Link>
-        {/* <Button on */}
-        
       </div>
       <h1>{attractions}</h1>
     </div>

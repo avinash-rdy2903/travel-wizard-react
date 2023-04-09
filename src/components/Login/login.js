@@ -75,6 +75,7 @@ const Login = memo(() => {
 							Sign In
 						</button>
 					</form>
+					<Link to="/reset-password"><button type="button" className={styles.green_btn}>Reset Password</button></Link>
 				</div>
 				<div className={styles.right}>
 					<h1>New Here?</h1>

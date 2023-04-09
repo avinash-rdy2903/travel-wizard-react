@@ -4,24 +4,27 @@ import styles from './search.module.css';
 import { Link } from 'react-router-dom';
 import { Button } from "react-bootstrap";
 import axiosInstance from "../../API/axiosInstance";
+import { usePlaceCartState } from '../../globalState/globalState';
 
 function Search() 
 {
     const [attractions,setAttractions] = useState([]);
     const location = useLocation();
-    const { val, dat } = location.state;    
+    const location2 = useLocation();
+    const { val, dat } = location.state;
+    const { date } = location2.state     
     const [isSaved,setSaved] = useState([]);
-    const [date, setDate] = useState('');
-  
+    const {placeCart,setPlaceCart} = usePlaceCartState();
+
+    // const [date, setDate] = useState('');
+    
     const save = async (e) => {
       e.preventDefault();
   
-      let place = dat[0];
-  
+      let place = dat[0];  
       console.log(`Saving:
         placeId: ${place._id},
-        date: ${date}`);
-  
+        date: ${date}`);  
       try{
           console.log("doing my best here");
           const { data: res } = await axiosInstance.post(`cart/places`, {
@@ -29,6 +32,7 @@ function Search()
                 placeId: place._id,
               });
           console.log(res);
+          setPlaceCart(res.placeCart);
           console.log("done");
           setSaved(69);
       }catch(e){
@@ -41,32 +45,8 @@ function Search()
         console.log('Hi ')
         console.log(dat)
         console.log(val)
-        search();
-    }, [])
-    
-    async function search() {
-        try{
-          for(let i=0;i<dat.length;i++) {
-            console.log("for "+i);
-            let place = dat[i];
-            if(place.name===val){
-              console.log(place)
-              const { data: res } = await axiosInstance.get(`place/${place._id}`);
-                // let resJson = await res.json();
-                if(res.status === 200){
-                    console.log(res);
-                    // console.log(res.place.attractions);
-                    setAttractions(res.place.attractions);
-                    // console.log(attractions);
-                    // console.log(JSON.stringify(resJson.place.attractions));
-                    // console.log(JSON.stringify(resJson.place,null,4));
-                }
-            }
-          }
-        }catch(e){
-        }   
-      }
-
+        setAttractions(dat[0].attractions);
+    }, []);
     function Card(props) {
         return (
           <div className={styles.card}>
@@ -86,20 +66,16 @@ function Search()
         <div>
             <h2>Hey</h2>
             <h2>{dat[0].name}</h2>
-                {/* TODO: this date thing will belong somewhere else and be required */}
-                <label htmlFor="date">Date:</label>
-                <input
-                    type="date"
-                    id="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                />
-            {!(isSaved == 69) && <Button className={styles.card__btn} onClick={save}>Save {dat[0].name} to itinerary</Button>}
-            {(isSaved == 69) && <p className={styles.saved}>Saved</p>}
-            {dat[0].attractions && dat[0].attractions.map(attraction =>   {
+            <h3 align = 'center'> See the top most attractions in {dat[0].name} Below! </h3>
+
+
+            {attractions && attractions.map(attraction =>   {
                     return <Card a = {attraction} />
                 }
-                )} 
+                )}
+            {!(isSaved == 69) && <Button align = 'center' className={styles.card__btn} onClick={save}>Save {dat[0].name} to itinerary</Button>}
+            {(isSaved == 69) && <p className={styles.saved}>Saved</p>} 
+            
             {/* {val}
             {dat} */}
             {/* {resJson.place.attractions} */}
