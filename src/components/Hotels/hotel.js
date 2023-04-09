@@ -3,6 +3,7 @@ import styles from "./hotel.module.css";
 import Button from 'react-bootstrap/Button';
 import React, { useState } from 'react';
 import axiosInstance from '../../API/axiosInstance';
+import { useHotelCartState } from '../../globalState/globalState';
 
 function Hotel() {
     const location = useLocation();

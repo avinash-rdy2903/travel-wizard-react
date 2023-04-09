@@ -18,6 +18,7 @@ import ResetPassword from './components/ResetPassword/resetPassword';
 import {useUserState, usePlaceCartState, useHotelCartState, useFlightCartState} from './globalState/globalState';
 
 
+
 const App = ()=>{
 	// const {user} = useContext(GlobalStateProvider);
 	
