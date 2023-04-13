@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from "./FlightSearch.module.css";
 import FlightCards from './flightCards';
 import axiosInstance from "../../API/axiosInstance";
+import Button from 'react-bootstrap/Button';
 
 function FlightSearch() {
   const [from, setFrom] = useState('');
@@ -76,7 +77,8 @@ function FlightSearch() {
           value={numPassengers}
           onChange={(e) => setNumPassengers(e.target.value)}
         />
-        <button type="submit">Search Flights</button>
+            <Button variant="primary" onClick={handleSubmit}>Search Flights</Button>
+        {/* <button type="submit">Search Flights</button> */}
       </form>
       <p></p>
       <FlightCards flights={data? data : []}/>

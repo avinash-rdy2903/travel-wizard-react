@@ -1,6 +1,13 @@
 
 import styles from './itinerary.module.css';
 import {useUserState, usePlaceCartState, useHotelCartState, useFlightCartState} from '../../globalState/globalState';
+import Button from 'react-bootstrap/Button';
+import axiosInstance from '../../API/axiosInstance';
+import React, { useRef, useState } from 'react';
+// import Popup from 'reactjs-popup';
+// import 'reactjs-popup/dist/index.css';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
 
 
 function Itineraries() {
@@ -8,6 +15,42 @@ function Itineraries() {
 	const {placeCart,setPlaceCart} = usePlaceCartState();
 	const {hotelCart,setHotelCart} = useHotelCartState();
 	const {flightCart,setFlightCart} = useFlightCartState();
+    const [emailSharing, setEmailSharing] = useState('');
+    const [show, setShow] = useState(false);
+    const formRef = useRef(null);
+    const [validated, setValidated] = useState(false);
+	const [error, setError] = useState("");
+  
+    // for the sharing modal
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const handleReset = () => {
+        formRef.current.reset();
+        setValidated(false);
+        setEmailSharing(undefined);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try{
+            console.log("ope yep mhm handling submit for sure");
+            // handle it
+            const { data: res } = await axiosInstance.get(`cart/share?email=${emailSharing}`);
+            // const { data: res } = await axiosInstance.post(`cart/share`, {email: emailSharing});
+            
+            setValidated(true);
+            handleReset();
+        } catch (error) {
+			if (
+				error.response &&
+				error.response.status >= 400 &&				//indicates a clinet side errors.
+				error.response.status <= 500
+			) {
+				setError(error.response.data.message);		//to render error message to the user
+			}
+		}
+      };
 
     const oldDate = new Date(1500,0,1);
 
@@ -20,8 +63,8 @@ function Itineraries() {
         )
     }
 
-    console.log(user);
-    console.log(user.ln);
+    // console.log(user);
+    // console.log(user.ln);
     console.log("pc");
     console.log(placeCart);
     console.log("pc.places");
@@ -68,37 +111,53 @@ function Itineraries() {
     }
 
     function getListOfDates() {
+        // console.log("getting list of dates");
         var startDate;
         var endDate;
-            // find start date
-            var splaces = isEmptyObject(placeCart)? oldDate : new Date(placeCart.places[0].visitingDate);
-            var sflights = isEmptyObject(flightCart)? oldDate : new Date(flightCart.flights[0].date);
-            var shotels = isEmptyObject(hotelCart)? oldDate : new Date(hotelCart.hotels[0].startDate);
-            var psdates = [splaces, sflights, shotels];
-            for (var i = 0; i < 3; i++) {
-                if (startDate === undefined && psdates[i] > oldDate) startDate = psdates[i];
-                else if (psdates[i] < startDate && psdates[i] > oldDate) startDate = psdates[i];
-            }
-            // // find end date
-            var eplaces = isEmptyObject(placeCart)? oldDate : new Date(placeCart.places[placeCart.places.length - 1].visitingDate);
-            var eflights = isEmptyObject(flightCart)? oldDate : new Date(flightCart.flights[flightCart.flights.length - 1].date);
-            var ehotels = isEmptyObject(hotelCart)? oldDate : new Date(hotelCart.hotels[hotelCart.hotels.length - 1].endDate);
-            if (eplaces > eflights && eplaces > ehotels) endDate = eplaces;
-            else if (eflights > eplaces && eflights > ehotels) endDate = eflights;
-            else if (ehotels > eflights && ehotels > eplaces) endDate = ehotels;
 
-        startDate = new Date(displayDate(startDate));
-        // console.log("splaces " + splaces +"shotels " + shotels +"sflights " + sflights);
-        // // console.log("feeeeeeeep" + ((new Date(1,3,2020)) < (new Date(1,4,2020))));
-        // console.log("FOOOOOOpppp" + (shotels < sflights && shotels < splaces));
-        // console.log("start date " + startDate + "\nEnddate " + endDate);
-        
-        var dateList = [];
-        for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
-            dateList.push(new Date(d));
+        var lengthOfCarts = isEmptyObject(placeCart)? 0 : placeCart.places.length;
+        lengthOfCarts += isEmptyObject(flightCart)? 0 : flightCart.flights.length;
+        lengthOfCarts += isEmptyObject(hotelCart)? 0 : hotelCart.hotels.length;
+        // console.log("caartlen " + lengthOfCarts);
+        if(lengthOfCarts == 0) return [];
+
+        else {
+                // find start date
+                var splaces = isEmptyObject(placeCart)? oldDate : new Date(placeCart.places[0].visitingDate);
+                var sflights = isEmptyObject(flightCart)? oldDate : new Date(flightCart.flights[0].date);
+                var shotels = isEmptyObject(hotelCart)? oldDate : new Date(hotelCart.hotels[0].startDate);
+                // console.log("splaces " + splaces +"shotels " + shotels +"sflights " + sflights);
+                var psdates = [splaces, sflights, shotels];
+                for (var i = 0; i < 3; i++) {
+                    if (startDate === undefined && psdates[i] > oldDate) startDate = psdates[i];
+                    else if (psdates[i] < startDate && psdates[i] > oldDate) startDate = psdates[i];
+                }
+                // // find end date
+                if (lengthOfCarts == 1) endDate = startDate;
+                else {    
+                    var eplaces = isEmptyObject(placeCart)? oldDate : new Date(placeCart.places[placeCart.places.length - 1].visitingDate);
+                    var eflights = isEmptyObject(flightCart)? oldDate : new Date(flightCart.flights[flightCart.flights.length - 1].date);
+                    var ehotels = isEmptyObject(hotelCart)? oldDate : new Date(hotelCart.hotels[hotelCart.hotels.length - 1].endDate);
+                    // console.log("eplaces", eplaces);
+                    // console.log("~~eplaces", new Date(placeCart.places[placeCart.places.length - 1].visitingDate));
+                    if (eplaces > eflights && eplaces > ehotels) endDate = eplaces;
+                    else if (eflights > eplaces && eflights > ehotels) endDate = eflights;
+                    else if (ehotels > eflights && ehotels > eplaces) endDate = ehotels;
+                }
+
+            startDate = new Date(displayDate(startDate));
+            endDate = new Date(displayDate(endDate));
+            // // console.log("feeeeeeeep" + ((new Date(1,3,2020)) < (new Date(1,4,2020))));
+            // console.log("FOOOOOOpppp" + (shotels < sflights && shotels < splaces));
+            // console.log("start date " + startDate + "\nEnddate " + endDate);
+            
+            var dateList = [];
+            for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+                dateList.push(new Date(d));
+            }
+            // console.log("Date list: " + dateList);
+            return dateList;
         }
-        // console.log("Date list: " + dateList);
-        return dateList;
     }
 
     function findFlightByDate(date) {
@@ -170,6 +229,9 @@ function Itineraries() {
     }
 
 
+    //____________________________________________________________________________________________________________
+
+
     if (Dates.length === 0) {
     //   console.log("none");
       return (<div><h1>No results.</h1></div>)
@@ -177,18 +239,57 @@ function Itineraries() {
     else {
         // console.log("trying dates");
         return (
-        <div className={styles.wrapper}>
-            {Dates.map(date =>   {
-                return (
-                    
-                    <Card
-                        date = {date}
-                    /> 
-                    
-                )
-            }
-            )}
-        </div>
+        <>
+            <Button variant="primary" onClick={handleShow} className={styles.card__btn}>
+                Share this itinerary
+            </Button>
+
+            <Modal show={show} onHide={handleClose}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                >
+                <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">Share with your fellow travelers!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form ref={formRef}  validated={validated}>
+                        <Form.Group className="mb-3">
+                            <Form.Label htmlFor="emailSharing">Email address</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="name@example.com"
+                                id="emailSharing"
+                                value={emailSharing}
+                                onChange={(e) => setEmailSharing(e.target.value)}
+                                autoFocus
+                            />
+                        </Form.Group>
+                    </Form>
+                    {error && <div className={styles.error_msg}>{error}</div>}
+                </Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                    Close
+                </Button>
+                <Button variant="primary" onClick={handleSubmit}>
+                    Share
+                </Button>
+                </Modal.Footer>
+            </Modal>
+            <div className={styles.wrapper}>
+                {Dates.map(date =>   {
+                    return (
+                        
+                        <Card
+                            date = {date}
+                        /> 
+                        
+                    )
+                }
+                )}
+            </div>
+        </>
         );
     }
     

@@ -86,7 +86,8 @@ function HotelBooking() {
             onChange={(e) => setMaxPrice(e.target.value)}
           />
           {/* <form action="/hotelcards"> */}
-            <button variant="primary" type="submit">Search Hotels</button>
+            <Button variant="primary" onClick={handleSubmit}>Search Hotels</Button>
+            {/* <button variant="primary" type="submit">Search Hotels</button> */}
           {/* </form> */}
         </form>
         {/* {isSubmitted && <HotelCards/>} */}
