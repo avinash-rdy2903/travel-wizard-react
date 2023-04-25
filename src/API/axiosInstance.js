@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default axios.create({
-    baseURL:process.env.SERVER_URL,
+    baseURL:"https://travel-wizard-t9.onrender.com/",
     withCredentials:true,
     credentials:"include"
 })
