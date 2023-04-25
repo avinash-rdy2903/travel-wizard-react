@@ -15,6 +15,7 @@ import Itinerary from "./components/Itinerary/itinerary";
 import Search from "./components/Search/search";
 import SearchResult from "./components/Search/searchresults";
 import ResetPassword from './components/ResetPassword/resetPassword';
+import ProcessGoogle from './components/Login/processGoogle';
 import {useUserState, usePlaceCartState, useHotelCartState, useFlightCartState} from './globalState/globalState';
 
 
@@ -36,6 +37,7 @@ const App = ()=>{
 					<Route path="/hotel"  exact element={<Hotel />} />
 					<Route path="/signup"  exact element={<Signup />} />
 					<Route path="/login"  exact element={<Login />} />
+					<Route path='/login/process-google' exact element={<ProcessGoogle />} />
 					<Route path="/itinerary"  exact element={<Itinerary />} />
 					<Route path="/hotelcards"  exact element={<HotelCards />} />
 					<Route path="/search"  exact element={<Search />} />

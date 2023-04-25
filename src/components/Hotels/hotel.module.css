@@ -112,3 +112,11 @@ body {
   white-space: pre-line;
   text-align: left;
 }
+
+.remove_margin_bottom {
+  margin-bottom: 0;
+}
+
+.add_margin_bottom {
+  margin-bottom: 0.5rem;
+}

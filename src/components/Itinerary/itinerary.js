@@ -4,10 +4,10 @@ import {useUserState, usePlaceCartState, useHotelCartState, useFlightCartState} 
 import Button from 'react-bootstrap/Button';
 import axiosInstance from '../../API/axiosInstance';
 import React, { useRef, useState } from 'react';
-// import Popup from 'reactjs-popup';
-// import 'reactjs-popup/dist/index.css';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import { Link } from 'react-router-dom';
+import { instanceOf } from 'prop-types';
 
 
 function Itineraries() {
@@ -19,7 +19,7 @@ function Itineraries() {
     const [show, setShow] = useState(false);
     const formRef = useRef(null);
     const [validated, setValidated] = useState(false);
-	const [error, setError] = useState("");
+    const [error, setError] = useState("");
   
     // for the sharing modal
     const handleClose = () => setShow(false);
@@ -37,8 +37,6 @@ function Itineraries() {
             console.log("ope yep mhm handling submit for sure");
             // handle it
             const { data: res } = await axiosInstance.get(`cart/share?email=${emailSharing}`);
-            // const { data: res } = await axiosInstance.post(`cart/share`, {email: emailSharing});
-            
             setValidated(true);
             handleReset();
         } catch (error) {
@@ -49,7 +47,8 @@ function Itineraries() {
 			) {
 				setError(error.response.data.message);		//to render error message to the user
 			}
-		}
+		}  
+
       };
 
     const oldDate = new Date(1500,0,1);
@@ -76,7 +75,16 @@ function Itineraries() {
         // console.log("is empty?");
         // console.log(flightCart);
         // console.log(obj.user === undefined);
-        return obj.user === undefined;
+        for(var prop in obj) {
+          // console.log(prop, obj[prop]);
+          if(obj.hasOwnProperty(prop)){
+            if(obj[prop] instanceof Array){
+              return obj[prop].length===0
+            }
+
+          }
+      }
+      return true;
     }
 
     // Sort all the data by dates
@@ -111,53 +119,123 @@ function Itineraries() {
     }
 
     function getListOfDates() {
-        // console.log("getting list of dates");
-        var startDate;
-        var endDate;
-
-        var lengthOfCarts = isEmptyObject(placeCart)? 0 : placeCart.places.length;
-        lengthOfCarts += isEmptyObject(flightCart)? 0 : flightCart.flights.length;
-        lengthOfCarts += isEmptyObject(hotelCart)? 0 : hotelCart.hotels.length;
-        // console.log("caartlen " + lengthOfCarts);
-        if(lengthOfCarts == 0) return [];
-
-        else {
-                // find start date
-                var splaces = isEmptyObject(placeCart)? oldDate : new Date(placeCart.places[0].visitingDate);
-                var sflights = isEmptyObject(flightCart)? oldDate : new Date(flightCart.flights[0].date);
-                var shotels = isEmptyObject(hotelCart)? oldDate : new Date(hotelCart.hotels[0].startDate);
-                // console.log("splaces " + splaces +"shotels " + shotels +"sflights " + sflights);
-                var psdates = [splaces, sflights, shotels];
-                for (var i = 0; i < 3; i++) {
-                    if (startDate === undefined && psdates[i] > oldDate) startDate = psdates[i];
-                    else if (psdates[i] < startDate && psdates[i] > oldDate) startDate = psdates[i];
-                }
-                // // find end date
-                if (lengthOfCarts == 1) endDate = startDate;
-                else {    
-                    var eplaces = isEmptyObject(placeCart)? oldDate : new Date(placeCart.places[placeCart.places.length - 1].visitingDate);
-                    var eflights = isEmptyObject(flightCart)? oldDate : new Date(flightCart.flights[flightCart.flights.length - 1].date);
-                    var ehotels = isEmptyObject(hotelCart)? oldDate : new Date(hotelCart.hotels[hotelCart.hotels.length - 1].endDate);
-                    // console.log("eplaces", eplaces);
-                    // console.log("~~eplaces", new Date(placeCart.places[placeCart.places.length - 1].visitingDate));
-                    if (eplaces > eflights && eplaces > ehotels) endDate = eplaces;
-                    else if (eflights > eplaces && eflights > ehotels) endDate = eflights;
-                    else if (ehotels > eflights && ehotels > eplaces) endDate = ehotels;
-                }
-
-            startDate = new Date(displayDate(startDate));
-            endDate = new Date(displayDate(endDate));
-            // // console.log("feeeeeeeep" + ((new Date(1,3,2020)) < (new Date(1,4,2020))));
-            // console.log("FOOOOOOpppp" + (shotels < sflights && shotels < splaces));
-            // console.log("start date " + startDate + "\nEnddate " + endDate);
-            
-            var dateList = [];
-            for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
-                dateList.push(new Date(d));
+        const today = new Date();
+        const oldDate = new Date(0);
+        let startDate;
+        let endDate;
+        console.log(isEmptyObject(flightCart));
+      
+        const lengthOfCarts = (isEmptyObject(placeCart) ? 0 : placeCart.places.length) + (isEmptyObject(flightCart) ? 0 : flightCart.flights.length) + (isEmptyObject(hotelCart) ? 0 : hotelCart.hotels.length);
+      
+        if (lengthOfCarts === 0) {
+          return [];
+        } else {
+          // find start date
+          const splaces = isEmptyObject(placeCart) ? oldDate : new Date(placeCart.places[0].visitingDate);
+          const sflights = isEmptyObject(flightCart) ? oldDate : new Date(flightCart.flights[0].date);
+          const shotels = isEmptyObject(hotelCart) ? oldDate : new Date(hotelCart.hotels[0].startDate);
+          const psdates = [splaces, sflights, shotels];
+      
+          for (let i = 0; i < 3; i++) {
+            if (startDate === undefined && psdates[i] > oldDate && psdates[i] >= today) {
+              startDate = psdates[i];
+            } else if (psdates[i] < startDate && psdates[i] > oldDate && psdates[i] >= today) {
+              startDate = psdates[i];
             }
-            // console.log("Date list: " + dateList);
-            return dateList;
+          }
+      
+          // find end date
+          if (lengthOfCarts === 1) {
+            endDate = startDate;
+          } else {
+            const eplaces = isEmptyObject(placeCart) ? oldDate : new Date(placeCart.places[placeCart.places.length - 1].visitingDate);
+            const eflights = isEmptyObject(flightCart) ? oldDate : new Date(flightCart.flights[flightCart.flights.length - 1].date);
+            const ehotels = isEmptyObject(hotelCart) ? oldDate : new Date(hotelCart.hotels[hotelCart.hotels.length - 1].endDate);
+      
+            if (eplaces > eflights && eplaces > ehotels) {
+              endDate = eplaces;
+            } else if (eflights > eplaces && eflights > ehotels) {
+              endDate = eflights;
+            } else if (ehotels > eflights && ehotels > eplaces) {
+              endDate = ehotels;
+            }
+          }
+      
+          startDate = new Date(displayDate(startDate));
+          endDate = new Date(displayDate(endDate));
+      
+          const dateList = [];
+      
+          for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+            if (d >= today) {
+              dateList.push(new Date(d));
+            }
+          }
+      
+          return dateList;
         }
+      }
+      
+
+    // function getListOfDates() {
+    //     // console.log("getting list of dates");
+    //     var startDate;
+    //     var endDate;
+
+    //     var lengthOfCarts = isEmptyObject(placeCart)? 0 : placeCart.places.length;
+    //     lengthOfCarts += isEmptyObject(flightCart)? 0 : flightCart.flights.length;
+    //     lengthOfCarts += isEmptyObject(hotelCart)? 0 : hotelCart.hotels.length;
+    //     // console.log("caartlen " + lengthOfCarts);
+    //     if(lengthOfCarts == 0) return [];
+
+    //     else {
+    //             // find start date
+    //             var splaces = isEmptyObject(placeCart)? oldDate : new Date(placeCart.places[0].visitingDate);
+    //             var sflights = isEmptyObject(flightCart)? oldDate : new Date(flightCart.flights[0].date);
+    //             var shotels = isEmptyObject(hotelCart)? oldDate : new Date(hotelCart.hotels[0].startDate);
+    //             // console.log("splaces " + splaces +"shotels " + shotels +"sflights " + sflights);
+    //             var psdates = [splaces, sflights, shotels];
+    //             for (var i = 0; i < 3; i++) {
+    //                 if (startDate === undefined && psdates[i] > oldDate) startDate = psdates[i];
+    //                 else if (psdates[i] < startDate && psdates[i] > oldDate) startDate = psdates[i];
+    //             }
+    //             // // find end date
+    //             if (lengthOfCarts == 1) endDate = startDate;
+    //             else {    
+    //                 var eplaces = isEmptyObject(placeCart)? oldDate : new Date(placeCart.places[placeCart.places.length - 1].visitingDate);
+    //                 var eflights = isEmptyObject(flightCart)? oldDate : new Date(flightCart.flights[flightCart.flights.length - 1].date);
+    //                 var ehotels = isEmptyObject(hotelCart)? oldDate : new Date(hotelCart.hotels[hotelCart.hotels.length - 1].endDate);
+    //                 // console.log("eplaces", eplaces);
+    //                 // console.log("~~eplaces", new Date(placeCart.places[placeCart.places.length - 1].visitingDate));
+    //                 if (eplaces > eflights && eplaces > ehotels) endDate = eplaces;
+    //                 else if (eflights > eplaces && eflights > ehotels) endDate = eflights;
+    //                 else if (ehotels > eflights && ehotels > eplaces) endDate = ehotels;
+    //             }
+
+    //         startDate = new Date(displayDate(startDate));
+    //         endDate = new Date(displayDate(endDate));
+    //         // // console.log("feeeeeeeep" + ((new Date(1,3,2020)) < (new Date(1,4,2020))));
+    //         // console.log("FOOOOOOpppp" + (shotels < sflights && shotels < splaces));
+    //         // console.log("start date " + startDate + "\nEnddate " + endDate);
+            
+    //         var dateList = [];
+    //         for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+    //             dateList.push(new Date(d));
+    //         }
+    //         // console.log("Date list: " + dateList);
+    //         return dateList;
+    //     }
+    // }
+
+    const removeFlightItinerary = async (e)=>{
+      try{
+        const {data:res} = await axiosInstance.delete(`cart/flights/${e.target.id}?id=${user._id}`);
+        console.log(res);
+        setFlightCart(res.flightCart);
+        window.location.reload(false);
+      }catch(e){
+        console.log(e);
+      }
     }
 
     function findFlightByDate(date) {
@@ -172,14 +250,49 @@ function Itineraries() {
             // console.log("bitch NOT empty");
             const theysame = datesAreSame(flight.date, date);
             if (theysame) {
-                // console.log("dates are same");
-                console.log(theysame);
-                const flightDate = new Date(flight.date);
+                // setCurrFlight(flight);
+                // const flightDate = new Date(flight.date);
                 return (
                     <div className={styles.card__description}>
-                        <p>Flight to {flight.flight.destination} from {flight.flight.source}
-                        <br/> Departure: {flightDate.toTimeString()}
-                        <br/> Arrival: {(new Date(flight.flight.arrivalDate)).toTimeString()}</p>
+                      <h3>Flight</h3>
+                        <p>Flight to: {flight.flight.destination} from {flight.flight.source}</p>
+                        <button onClick={removeFlightItinerary} className={styles.card__btn} id={flight.flight._id}>Remove from Itinerary</button>
+
+                    </div>
+                );
+            }
+            else {
+                // console.log("dates NOT same");
+                return (
+                    <></>
+                );
+            }
+
+        }))
+    }
+    function findhotelsByDate(date) {
+        date = new Date(date);
+        date = new Date(displayDate(date));
+        console.log(hotels);
+        if (isEmptyObject(hotelCart)) {
+            // console.log("this bitch empty; YEET");
+            // return <div><p>bitch is empty</p></div>;
+            return <></>;
+        }
+        return (hotels.map(hotel => {
+            console.log("bitch NOT empty");
+            const theysame = datesAreSame(hotel.startDate, date);
+            console.log(theysame);
+            if (!theysame) {
+                // console.log("dates are same");
+                console.log(theysame);
+                console.log(hotel);
+                // const hotelDate = new Date(hotel.date);
+                return (
+                    <div className={styles.card__description}>
+                      <h3>Hotel:</h3>
+                        <p>Name: {hotel.hotel.name}
+                        <br/> Address: {hotel.hotel.address}</p>
                     </div>
                 );
             }
@@ -213,9 +326,18 @@ function Itineraries() {
                 // console.log("dates are same");
                 // console.log(theysame);
                 return (
-                    <div className={styles.card__description}>
-                        <h2 className={styles.card__title}>{place.place.name}</h2>
-                    </div>
+                    <><div className={styles.card__description}>
+                    <h2 className={styles.card__title}>{place.place.name}</h2>
+                  </div><div className={styles.card__btns}>
+                      <Link to="/flights">
+                        <button className={styles.card__btn}>Book Flights</button>
+                      </Link>
+                      <Link to="/hotels">
+                        <button className={styles.card__btn}>Book Hotels</button>
+                      </Link>
+                      <button onClick={removePlaceItinerary} className={styles.card__btn} id={place.place._id}>Remove from Itinerary</button>
+
+                    </div></>
                 );
             }
             else {
@@ -227,7 +349,18 @@ function Itineraries() {
 
         }))
     }
+    const removePlaceItinerary = async (e)=>{
+      console.log(`cart/places/${e.target.id}?id=${user._id}`);
 
+      try{
+        const {data:res} = await axiosInstance.delete(`cart/places/${e.target.id}?id=${user._id}`);
+        // console.log(res);
+        setPlaceCart(res.placeCart);
+        window.location.reload(false);
+      }catch(e){
+        console.log(e);
+      }
+    }
 
     //____________________________________________________________________________________________________________
 
@@ -294,20 +427,35 @@ function Itineraries() {
     }
     
     function Card(props) {
-        // const date = new Date(props.place.visitingDate);
-        console.log('card');
-        // console.log(props.date);
-        // console.log(date);
-        return (
-          <div className={styles.card}>
-            <div className={styles.card__body}>
-              <p className={styles.card__date}>{displayDate(props.date)}</p>
-              {findPlaceByDate(props.date)}
-              {findFlightByDate(props.date)}
-            </div>
-          </div>
+      console.log('card');
+      const place = findPlaceByDate(props.date);
+      const flight = findFlightByDate(props.date);
+      const hotel = findhotelsByDate(props.date)
+    
+      let cardContent;
+      if (place || flight) {
+        cardContent = (
+          <>
+      
+            {place}
+            
+            {flight}
+            {hotel}
+            
+          </>
         );
+      }
+    
+      return (
+        <div className={styles.card}>
+          <div className={styles.card__body}>
+            <p className={styles.card__date}>{displayDate(props.date)}</p>
+            {cardContent}
+          </div>
+        </div>
+      );
     }
+    
 }
 
 export default Itineraries;

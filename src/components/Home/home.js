@@ -40,41 +40,42 @@ export default function Home() {
   const today = new Date().toISOString().split("T")[0]; // get current date
 
   return (
-    <div className={styles.container}>
-      {/* class={styles.bg} */}
-      <div style={{ marginTop: 10 }}>
-        <h2 style={{ marginBottom: 10 }}>Search your next destination</h2>
-        <Autocomplete
-          freeSolo
-          filterOptions={(x) => x}
-          onChange={(e) => setValue(e.target.innerText)}
-          options={optionsOne ? optionsOne.map((obj) => obj.name) : []}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Search One"
-              onChange={(e) => onChangeOne(e)}
-            />
-          )}
-        />
-        <br />
-        <label htmlFor="date">Date:</label>
-        <input
-          type="date"
-          id="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          min={today} // set min date to current date
-        />
-        {isSearchDisabled && <p>Please enter a valid date</p>} {/* display message if date is empty */}
-        <br />
-        <Link to="/search" state={{ val: value, dat: data, date: date }}>
-          <button style={{ marginTop: 15 }} onClick={Search.search} disabled={isSearchDisabled}>
-            Search
-          </button>
-        </Link>
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        <div className={styles.searchBox}>
+          <h2>Search your next destination</h2>
+          <Autocomplete
+            freeSolo
+            filterOptions={(x) => x}
+            onChange={(e) => setValue(e.target.innerText)}
+            options={optionsOne ? optionsOne.map((obj) => obj.name) : []}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Search One"
+                onChange={(e) => onChangeOne(e)}
+              />
+            )}
+          />
+          <br />
+          <label htmlFor="date">Date:</label>
+          <input
+            type="date"
+            id="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            min={today} // set min date to current date
+          />
+          {isSearchDisabled && <p>Please enter a valid date</p>} {/* display message if date is empty */}
+          <br />
+          <Link to="/search" state={{ val: value, dat: data, date: date }}>
+            <button disabled={isSearchDisabled}>
+              Search
+            </button>
+          </Link>
+        </div>
+        <h1>{attractions}</h1>
       </div>
-      <h1>{attractions}</h1>
     </div>
   );
 }

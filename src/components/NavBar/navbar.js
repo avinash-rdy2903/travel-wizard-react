@@ -130,9 +130,14 @@ const NavigationBar = React.memo(()=> {
                   Offcanvas
                 </Offcanvas.Title>
               </Offcanvas.Header>
+
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-3">
-                  <Nav.Link href="/itinerary">Your Itinerary</Nav.Link>
+                  <NavDropdown title="Your Itinerary" id={`offcanvasNavbarDropdown-expand-${'lg'}`}>
+                    <NavDropdown.Item href="/itinerary">My Itinerary</NavDropdown.Item>
+                    <NavDropdown.Item href="/itinerary">Shared Itinerary</NavDropdown.Item>
+                  </NavDropdown>
+                  {/* <Nav.Link href="/itinerary">Your Itinerary</Nav.Link> */}
                   <Nav.Link href="/flights">Flights</Nav.Link>
                   <Nav.Link href="/hotels">Hotels</Nav.Link>
                   <DropDown></DropDown>

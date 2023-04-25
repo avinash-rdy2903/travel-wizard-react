@@ -107,7 +107,7 @@ body {
   border-radius: var(--radius);
   transition: background 200ms ease-in, color 200ms ease-in;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   margin-left: 85%;
 }
 
@@ -129,4 +129,29 @@ body {
 	color: white;
 	border-radius: 5px;
 	text-align: center;
+}
+
+/* .card__btns {
+  display: flex;
+  align-items: left;
+  justify-content: space-between;
+} */
+.card__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card__btns {
+  display: flex;
+  justify-content: center;
+  align-items: 50px;
+  justify-content: space-between;
+  margin-right: 10px;
+}
+
+.card__btn {
+  margin-right: 10px;
+  justify-content: center;
 }

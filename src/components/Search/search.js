@@ -4,7 +4,7 @@ import styles from './search.module.css';
 import { Link } from 'react-router-dom';
 import { Button } from "react-bootstrap";
 import axiosInstance from "../../API/axiosInstance";
-import { usePlaceCartState } from '../../globalState/globalState';
+import { usePlaceCartState,useUserState } from '../../globalState/globalState';
 
 function Search() 
 {
@@ -15,6 +15,7 @@ function Search()
     const { date } = location2.state     
     const [isSaved,setSaved] = useState([]);
     const {placeCart,setPlaceCart} = usePlaceCartState();
+    const {user,setUser} = useUserState();
 
     // const [date, setDate] = useState('');
     
@@ -28,6 +29,7 @@ function Search()
       try{
           console.log("doing my best here");
           const { data: res } = await axiosInstance.post(`cart/places`, {
+                userId: user._id,
                 visitingDate: date,
                 placeId: place._id,
               });
@@ -55,7 +57,7 @@ function Search()
               <h2 className={styles.card__title}>{props.a.name}</h2>
               <p className={styles.card__description}>{props.a.address}</p>
             </div>
-            <Link to="/searchResult" state={{ hotel: props.a }}>
+            <Link to="/searchResult" state={{ destination: props.a }}>
               <Button className={styles.card__btn}>View Details</Button>
             </Link>
           </div>
@@ -64,8 +66,8 @@ function Search()
 
     return (
         <div>
-            <h2>Hey</h2>
-            <h2>{dat[0].name}</h2>
+            {/* <h2>Hey</h2> */}
+            <h2 align = 'center'>{dat[0].name}</h2>
             <h3 align = 'center'> See the top most attractions in {dat[0].name} Below! </h3>
 
 

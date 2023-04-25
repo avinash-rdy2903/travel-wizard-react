@@ -6,11 +6,15 @@ import {useNavigate} from 'react-router-dom'
 const ResetPassword = memo(() => {
     const [error, setError] = useState("");
     const [email,setEmail]  = useState("");
+    const [answer,setAnswer] = useState("");
     const [enablePasswordReset,setEnablePasswordReset] = useState(false);
     const [password,setPassword] = useState("");
     const [cnf,setCnf] = useState("");
     const [otp,setOtp] = useState();
     const [resetFinished,setResetFinished] = useState(false);
+    const [question,setQuestion] = useState("");
+    const [display_string,setDisplay] = useState("");
+    const [show,setShow] = useState(false);
     const handleError = (err) => {
         setError(err);
     }
@@ -24,9 +28,18 @@ const ResetPassword = memo(() => {
                 throw new Error(res.message)
             }
             setEnablePasswordReset(true);
-            alert("OTP generated, check your e-mail")
+            console.log(res);
+            setQuestion(res.question);
+            if(res.question===undefined){
+                setDisplay("Enter OTP and new password to reset password");
+            }else{
+                setDisplay("Enter OTP, Security answer and new password to reset password");
+                setShow(true);
+            }
             setError("");
+            alert("OTP generated, check your e-mail")
         }catch(e){
+            console.log(e);
             handleError(e.message);
         }
     }
@@ -37,11 +50,16 @@ const ResetPassword = memo(() => {
             return;
         }
         try{
-            const {data:res} = await axiosInstance.post("auth/otp/verify",{otp:otp,password:password});
+            const {data:res} = await axiosInstance.post("auth/otp/verify",{otp:otp,password:password,answer:answer});
             if(res.status===200){
                 setResetFinished(true);
             }
+            if(res.status==400){
+                throw new Error(res.message);
+            }
+            console.log(res);
         }catch(e){
+            console.log(e);
             handleError(e.message);
         }
     }
@@ -62,7 +80,8 @@ const ResetPassword = memo(() => {
         }
         if(!enablePasswordReset){
             return (
-                    <><h1>Enter your email address to generate an OTP</h1>
+                    <>
+                    <h1>Enter your email address to generate an OTP</h1>
                     <form className={styles.form_container} onSubmit={handleSubmitOtp}>
                     <input
                         type="email"
@@ -82,7 +101,7 @@ const ResetPassword = memo(() => {
         }else{
             return (
                 <>
-                    <h1>Enter your OTP and new password</h1>
+                    <h2>{display_string}</h2>
                     <form className={styles.form_container} onSubmit={handleSubmitPassword}>
                     <input
                         type="number"
@@ -92,6 +111,15 @@ const ResetPassword = memo(() => {
                         value={otp}
                         required
                         className={styles.input} />
+                    {console.log(display_string,show)}
+                    {show && (<input
+                        type="text"
+                        placeholder="Security answer"
+                        name="otp"
+                        onChange={(e) => setAnswer(e.target.value)}
+                        value={answer}
+                        required
+                        className={styles.input} />)}
                     <input
                         type="password"
                         placeholder="Password"

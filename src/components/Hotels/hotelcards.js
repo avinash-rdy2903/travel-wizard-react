@@ -11,10 +11,14 @@ import React, {ReactDOM} from 'react';
 import Button from 'react-bootstrap/Button';
 import styles from "./hotelcards.module.css";
 import { Link } from 'react-router-dom';
+import axiosInstance from '../../API/axiosInstance';
 // import Hotel from './hotel';
-function HotelCards(hotels) {
+function HotelCards(hotels, checkIn, checkOut) {
   console.log("hotels!");
   console.log(hotels);
+  console.log("hotels.checkin " + hotels.checkIn);
+  checkIn = hotels.checkIn;
+  checkOut = hotels.checkOut;
   console.log("hotels.hotels");
   console.log(hotels.hotels);
   hotels = hotels.hotels;
@@ -35,7 +39,17 @@ function HotelCards(hotels) {
     else return (
       <div className={styles.wrapper}>
         {hotels.map(hotelData =>   {
-          return <Card hotelData = {hotelData}/> 
+          
+          for(let i=0; i<hotelData.rooms.length; i++) {
+              axiosInstance.get(`roomType/${hotelData.rooms[i].roomType}`).then((response)=>{
+                  console.log(response);
+                  hotelData.rooms[i].roomType = response.data.roomType;
+              }).catch((error)=>{
+                  console.log(error);
+              })
+          }
+          // console.log("while mapping, hotelData: " + hotelData.rooms[0].roomNumber);
+          return <Card hotelData = {hotelData} checkIn = {checkIn} checkOut={checkOut}/> 
           }
         )} 
 
@@ -66,6 +80,8 @@ function HotelCards(hotels) {
   }
   
   function Card(props) {
+    // console.log("in cards, hotelData: " + props.hotelData.rooms[0].roomNumber);
+    console.log("in cards, start date: " + props.checkIn);
     return (
       <div className={styles.card}>
         <div className={styles.card__body}>
@@ -73,7 +89,7 @@ function HotelCards(hotels) {
           <h2 className={styles.card__title}>{props.hotelData.name}</h2>
           <p className={styles.card__description}>{props.hotelData.address}</p>
         </div>
-        <Link to="/hotel" state={{ hotel: props.hotelData }}>
+        <Link to="/hotel" state={{ hotel: props.hotelData, checkIn: props.checkIn, checkOut: props.checkOut }}>
           <Button className={styles.card__btn}>View Details</Button>
         </Link>
       </div>
